@@ -1,0 +1,293 @@
+/* CSS Variables for color palette */
+:root {
+  --yale-blue: #134074ff;
+  --berkeley-blue: #13315cff;
+  --oxford-blue: #0b2545ff;
+  --powder-blue: #8da9c4ff;
+  --light-blue: #dbe7f0;
+  --lavander: #e6e6fa;
+}
+
+/* Base Reset & Layout */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--powder-blue); /* lighter background */
+  color: #0b2545; /* dark text on light bg */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  padding: 1rem 2rem;
+  background: rgba(11, 37, 69, 0.4);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color:var(--lavander);
+  letter-spacing: 1.5px;
+  user-select: none;
+}
+
+main {
+  flex-grow: 1;
+  padding: 1rem 2rem;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  backdrop-filter: blur(4px);
+}
+
+footer {
+  text-align: center;
+  padding: 0.8rem 1rem;
+  font-size: 0.9rem;
+  color: #333;
+  user-select: none;
+}
+
+
+/* Typography & Elements */
+.info-text {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--powder-blue);
+}
+
+form {
+  margin-bottom: 1.5rem;
+  background: rgba(11, 37, 69, 0.15);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  display: block;
+  color: var(--lavander);
+}
+
+select,
+input[type="url"],
+input[type="text"],
+input[type="file"],
+button {
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  border-radius: 6px;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+}
+
+select {
+  background: var(--powder-blue);
+  color: var(--oxford-blue);
+}
+
+button {
+  background: var(--yale-blue);
+  color: var(--lavander);
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.25s;
+  user-select: none;
+}
+
+button:hover {
+  background: var(--berkeley-blue);
+}
+
+/* PDF Viewer */
+#pdf-container {
+  flex-grow: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  background: #fff;
+  margin-top: 1rem;
+  min-height: 60vh;
+}
+
+#pdf-viewer {
+  width: 100%;
+  height: 70vh;
+  border: none;
+}
+
+/* Table Styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(11, 37, 69, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 0.4rem;
+}
+
+th {
+  background-color: rgba(11, 37, 69, 0.4);
+  font-weight: 700;
+  text-align: center;
+  color: var(--lavander);
+  padding: 0.7rem 1rem;
+  vertical-align: middle;
+}
+
+td {
+  padding: 0.7rem 1rem;
+  color: var(--lavander);
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+td.title-cell {
+  font-weight: 400;
+  max-width: 200px;
+  text-align: left;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+td button {
+  width: 70%;
+  display: block;
+  margin: 0 auto;
+}
+
+tr:hover {
+  background-color: rgba(19, 49, 92, 0.5);
+  cursor: pointer;
+}
+
+
+/* Drop Zone */
+#drop-zone {
+  border: 2px dashed var(--yale-blue);
+  border-radius: 10px;
+  background-color: #e6e6fa; /* soft lavender background */
+  padding: 40px 20px;
+  height: 250px;
+  width: 750px;
+  margin: 20px auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+#drop-zone.dragover {
+  background-color: #dcdcf5; /* slightly darker lavender when dragging */
+  border-color: white;
+}
+
+button.upload-btn {
+  padding: 1rem 1.5rem;
+  font-size: 1.5rem;
+  width: 50%;
+  min-height: 50px;
+  background-color: var(--yale-blue);
+  color: var(--lavander);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 12px;
+}
+
+button.upload-btn:hover {
+  background-color: var(--berkeley-blue);
+}
+
+#drop-zone-label {
+  font-size: 1.25rem;
+  color: #333; /* dark text to contrast the light background */
+  user-select: none;
+  margin: 0;
+}
+
+
+/* Modals */
+#flash-modal,
+#confirm-modal,
+#upload-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(11, 37, 69, 0.5);
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  padding: 25px 30px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 90%;
+  font-size: 1.1rem;
+  text-align: center;
+  font-weight: 600;
+  color: #fff;
+  box-sizing: border-box;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  background-color: var(--berkeley-blue);
+}
+
+#flash-modal .modal-content.success {
+  background-color: #4CAF50;
+  border-left: 6px solid #388E3C;
+}
+
+#flash-modal .modal-content.error {
+  background-color: #F44336;
+  border-left: 6px solid #D32F2F;
+}
+
+#confirm-modal .modal-content button {
+  cursor: pointer;
+  margin: 0.3rem 0;
+}
+
+#confirm-modal .modal-content button[type="submit"] {
+  background-color: #f44336;
+  color: var(--lavander);
+}
+
+#confirm-modal .modal-content button[type="submit"]:hover {
+  background-color: #d32f2f;
+}
+
+#confirm-modal .modal-content button[type="button"] {
+  background-color: var(--powder-blue);
+  color: var(--oxford-blue);
+}
+
+#confirm-modal .modal-content button[type="button"]:hover {
+  background-color: #b0c4de;
+}
+
+/* Optional fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

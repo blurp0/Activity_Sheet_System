@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GitHub PDF Viewer with Upload and Download</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <header>
+    GitHub PDF Viewer with Upload and Download
+  </header>
+  <main>
+    <!-- Flash modal -->
+    <div id="flash-modal" role="alertdialog" aria-live="assertive" aria-modal="true">
+      <div class="modal-content"></div>
+    </div>
+
+    <!-- Delete confirmation modal -->
+    <div id="confirm-modal" class="modal">
+      <div class="modal-content">
+        <p id="confirm-message">Are you sure you want to delete this PDF?</p>
+        <form id="confirm-delete-form" method="POST" action="/">
+          <input type="hidden" name="delete_pdf" value="1" />
+          <input type="hidden" name="filename" id="confirm-filename" value="" />
+          <div style="margin-top: 20px;">
+            <button type="submit">Yes, Delete</button>
+            <button type="button" onclick="closeConfirmModal()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Upload button and modal -->
+    <div id="drop-zone">
+      <input type="file" name="pdf_file" id="hidden_pdf_file" accept="application/pdf" required style="display:none;" />
+      <button type="button" class="upload-btn" id="choose-file-btn">Choose file</button>
+      <p id="drop-zone-label">or drop files here</p>
+    </div>
+
+
+    <!-- Upload modal with visible input -->
+    <div id="upload-modal" class="modal">
+      <div class="modal-content">
+        <h3>Upload a PDF</h3>
+        <form method="POST" enctype="multipart/form-data" id="upload-form">
+          <input type="hidden" name="upload_pdf" value="1" />
+          <label for="request_title">Request Title:</label>
+          <input type="text" name="request_title" id="request_title" placeholder="e.g. Overview of ..." required />
+          <label for="pdf_file">Select PDF file:</label>
+          <input type="file" name="pdf_file" id="pdf_file" accept="application/pdf" required />
+          <div style="margin-top: 20px;">
+            <button type="submit">Upload PDF to GitHub</button>
+            <button type="button" onclick="closeUploadModal()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <h2>PDFs in Repository</h2>
+    {% if pdf_files %}
+      <table aria-label="List of PDF files in GitHub repo">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Download</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pdf in pdf_files %}
+            <tr>
+              <td class="title-cell">{{ pdf.title }}</td>
+              <td>
+                <a href="{{ pdf.url }}" download>
+                  <button type="button">Download</button>
+                </a>
+              </td>
+              <td>
+                <button type="button" onclick="openConfirmModal('{{ pdf.path }}')">Delete</button>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No PDF files found in the repository.</p>
+    {% endif %}
+
+  </main>
+
+  <footer>
+    &copy; 2025 GitHub PDF Viewer
+  </footer>
+
+  <!-- Hidden container to pass flash messages JSON to external JS -->
+  <script id="flash-messages-data" type="application/json">
+    {{ get_flashed_messages(with_categories=true) | tojson }}
+  </script>
+
+  <!-- Link external JavaScript -->
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
