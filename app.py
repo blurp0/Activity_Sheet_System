@@ -4,7 +4,7 @@ import os
 import re
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'dev_secret_key')
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', '')
 
 # GitHub configuration
 GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', '')
