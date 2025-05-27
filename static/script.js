@@ -101,15 +101,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Form validation
   const uploadForm = document.getElementById('upload-form');
 
   if (uploadForm) {
-    uploadForm.addEventListener('submit', function(e) {
+    uploadForm.addEventListener('submit', function (e) {
       const authorsInput = document.getElementById('authors');
       const dateInput = document.getElementById('date');
 
-      // Basic validation for authors (not empty)
+      // Validate authors
       if (!authorsInput.value.trim()) {
         alert('Please enter at least one author.');
         authorsInput.focus();
@@ -117,14 +116,104 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Basic validation for date (MM/DD/YY format)
-      const datePattern = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/;
-      if (!datePattern.test(dateInput.value.trim())) {
-        alert('Please enter a valid date in MM/DD/YY format.');
+      // Validate date format: YYYY-MM-DD
+      const rawDate = dateInput.value.trim();
+      const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+      if (!datePattern.test(rawDate)) {
+        alert('Please enter a valid date.');
         dateInput.focus();
         e.preventDefault();
         return;
       }
+
+      // Convert date to MM/DD/YYYY before submitting
+      const [year, month, day] = rawDate.split('-');
+      const formattedDate = `${month}/${day}/${year}`;
+      dateInput.value = formattedDate;
+
+      // Now the form submits with the correct date format
     });
+  }
+
+  // Approval Sheet List: Search, Filter by Author & Date, and Sort
+  
+  const searchInput = document.getElementById('search-input');
+  const filterAuthorsSelect = document.getElementById('filter-authors');
+  const filterYearSelect = document.getElementById('filter-year');
+  const sortSelect = document.getElementById('sort-select');
+  const table = document.getElementById('approval-table');
+  const tbody = table ? table.querySelector('tbody') : null;
+
+  function parseDateFromCell(dateStr) {
+    if (!dateStr) return null;
+    const [month, day, year] = dateStr.split('/');
+    return new Date(`${year}-${month}-${day}`);
+  }
+
+  function filterAndSortRows() {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    const authorFilter = filterAuthorsSelect.value.toLowerCase();
+    const yearFilter = filterYearSelect.value;
+    const sortValue = sortSelect.value;
+
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+
+    rows.forEach(row => {
+      const title = row.querySelector('.title-cell').textContent.toLowerCase();
+      const authors = row.querySelector('.author-column').textContent.toLowerCase();
+      const dateText = row.querySelector('.date-column').textContent.trim();
+      const rowDate = parseDateFromCell(dateText);
+      const rowYear = rowDate ? rowDate.getFullYear().toString() : "";
+
+      const matchesSearch = !searchTerm || title.includes(searchTerm) || authors.includes(searchTerm);
+      const matchesAuthor = !authorFilter || authors.includes(authorFilter);
+      const matchesYear = !yearFilter || rowYear === yearFilter;
+
+      if (matchesSearch && matchesAuthor && matchesYear) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    const visibleRows = rows.filter(row => row.style.display !== 'none');
+
+    visibleRows.sort((a, b) => {
+      const aTitle = a.querySelector('.title-cell').textContent.toLowerCase();
+      const bTitle = b.querySelector('.title-cell').textContent.toLowerCase();
+      const aAuthors = a.querySelector('.author-column').textContent.toLowerCase();
+      const bAuthors = b.querySelector('.author-column').textContent.toLowerCase();
+      const aDate = parseDateFromCell(a.querySelector('.date-column').textContent);
+      const bDate = parseDateFromCell(b.querySelector('.date-column').textContent);
+
+      switch (sortValue) {
+        case 'title-asc':
+          return aTitle.localeCompare(bTitle);
+        case 'title-desc':
+          return bTitle.localeCompare(aTitle);
+        case 'authors-asc':
+          return aAuthors.localeCompare(bAuthors);
+        case 'authors-desc':
+          return bAuthors.localeCompare(aAuthors);
+        case 'date-asc':
+          return (aDate || 0) - (bDate || 0);
+        case 'date-desc':
+          return (bDate || 0) - (aDate || 0);
+        default:
+          return 0;
+      }
+    });
+
+    visibleRows.forEach(row => tbody.appendChild(row));
+  }
+
+  if (searchInput && filterAuthorsSelect && filterYearSelect && sortSelect && tbody) {
+    searchInput.addEventListener('input', filterAndSortRows);
+    filterAuthorsSelect.addEventListener('change', filterAndSortRows);
+    filterYearSelect.addEventListener('change', filterAndSortRows);
+    sortSelect.addEventListener('change', filterAndSortRows);
+
+    filterAndSortRows(); // initial filter
   }
 });

@@ -45,7 +45,7 @@ def index():
                     clean_folder = sanitize_folder_name(request_title)
                     selected_pdf_url = f"https://raw.githubusercontent.com/{GITHUB_REPO}/main/{APPROVAL_SHEET_FOLDER}/{clean_folder}/{filename}"
 
-                    flash(f"Successfully uploaded and pushed {filename} to GitHub.", "success")
+                    flash(f"Successfully uploaded", "success")
 
                     # Save metadata to DB
                     authors = [a.strip() for a in authors_raw.split(",") if a.strip()]
@@ -74,7 +74,7 @@ def index():
                     delete_pdf_from_github(download_link)
                     deleted = delete_approval_sheet_by_download_link(download_link)
                     if deleted:
-                        flash(f"Successfully deleted '{title}' from GitHub and database.", "success")
+                        flash(f"Successfully deleted", "success")
                     else:
                         flash(f"Deleted file from GitHub, but failed to delete metadata from database.", "warning")
                 except Exception as e:
