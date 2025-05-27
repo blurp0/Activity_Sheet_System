@@ -222,7 +222,6 @@ button.upload-btn:hover {
   margin: 0;
 }
 
-
 /* Modals */
 #flash-modal,
 #confirm-modal,
@@ -232,8 +231,8 @@ button.upload-btn:hover {
   z-index: 1000;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: rgba(11, 37, 69, 0.5);
   align-items: center;
   justify-content: center;

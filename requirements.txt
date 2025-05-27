@@ -1,2 +1,4 @@
 Flask
 PyGithub
+SQLAlchemy
+pymysql
